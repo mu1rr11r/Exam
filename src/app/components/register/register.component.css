@@ -1,0 +1,17 @@
+
+    .register-card {
+    width: 75%;
+    margin-top: 10%;
+    margin-left: 13%;
+    }
+    .register-header {
+      background-color: #f44336;
+      color: #fff;
+      padding: 10px;
+      border-radius: 50px;
+      width: 40%;
+      margin: -25px auto 20px auto;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+    }

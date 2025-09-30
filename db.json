@@ -1,0 +1,37 @@
+{
+  "students": [
+    {
+      "id": "1",
+      "name": "moutasem",
+      "email": "adminmoutasem@admin.com",
+      "password": "Q123"
+    },
+    {
+      "id": "3922",
+      "name": "Ahmed",
+      "email": "admijjjn@admin.com",
+      "password": "W123"
+    },
+    {
+      "id": "25f9",
+      "name": "wefew",
+      "email": "adm@admin.com",
+      "password": "Q123"
+    }
+  ],
+  "Doctor": [
+    {
+      "id": "1",
+      "name": "moutasem",
+      "email": "admin@admin.com",
+      "password": "Q123"
+    }
+  ],
+  "login": [
+    {
+      "name": "moutasem",
+      "role": "Doctor",
+      "id": "1"
+    }
+  ]
+}

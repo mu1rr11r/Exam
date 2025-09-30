@@ -1,0 +1,131 @@
+<div class="new-exam container mt-4">
+  <div class="accordion" id="examSteps">
+    <!-- Step 1 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#step1">
+          اسم المادة
+        </button>
+      </h2>
+      <div id="step1" class="accordion-collapse collapse show" data-bs-parent="#examSteps">
+        <div class="accordion-body">
+          <div class="mb-3">
+            <label class="form-label fw-bold">اسم المادة :</label>
+            <input type="text" class="form-control" placeholder="ادخل اسم المادة" [formControl]="name">
+          </div>
+          <div class="text-end">
+            <button class="btn btn-danger" data-bs-toggle="collapse" data-bs-target="#step2">ابدأ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTwo">
+        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#step2">
+          اسئلة اللغة العربية
+        </button>
+      </h2>
+      <div id="step2" class="accordion-collapse collapse" data-bs-parent="#examSteps">
+        <div class="accordion-body">
+          <form [formGroup]="questionsforme">
+            <div class="mb-3">
+              <label class="form-label fw-bold">السؤال</label>
+              <input formControlName="question" type="text" class="form-control" placeholder="اكتب السؤال">
+            </div>
+
+           <div class="row g-3">
+  <div class="col-md-6 col-sm-12">
+    <div class="input-group">
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="radio" name="correct" value="answer1" (change)="getcoraect($event)">
+      </div>
+      <input formControlName="answer1" type="text" class="form-control" placeholder="إجابة A">
+    </div>
+  </div>
+
+
+
+
+  <div class="col-md-6 col-sm-12">
+    <div class="input-group">
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="radio" name="correct" value="answer2" (change)="getcoraect($event)">
+      </div>
+      <input formControlName="answer2" type="text" class="form-control" placeholder="إجابة B">
+    </div>
+  </div>
+
+  <div class="col-md-6 col-sm-12">
+    <div class="input-group">
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="radio" name="correct" value="answer3" (change)="getcoraect($event)">
+      </div>
+      <input formControlName="answer3" type="text" class="form-control" placeholder="إجابة C">
+    </div>
+  </div>
+
+  <div class="col-md-6 col-sm-12">
+    <div class="input-group">
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="radio" name="correct" value="answer4" (change)="getcoraect($event)">
+      </div>
+      <input formControlName="answer4" type="text" class="form-control" placeholder="إجابة D">
+    </div>
+  </div>
+</div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <div>
+                <button class="btn btn-success me-2" data-bs-toggle="collapse" data-bs-target="#step3">انتهاء</button>
+                <button class="btn btn-secondary" type="reset">الغاء</button>
+              </div>
+              <div>
+                <button class="btn btn-warning me-2" type="button">حذف</button>
+                <button class="btn btn-primary" type="button" [disabled]="questionsforme.invalid" (click)="cratequestion()">حفظ</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+<!-- Step 3 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingThree">
+    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#step3">
+      عرض الاختبار
+    </button>
+  </h2>
+  <div id="step3" class="accordion-collapse collapse" data-bs-parent="#examSteps">
+    <div class="accordion-body p-0">
+
+      <div class="examBox">
+        <div class="examhead text-center mb-3">
+          <h2 class="fw-bold">اختبار اللغة العربية</h2>
+        </div>
+
+        <div class="quizBox border rounded shadow-sm">
+          <strong><span class="text-danger">سؤال 1</span> . ما هي عاصمة مصر؟</strong>
+          <div class="mt-2" dir="rtl">
+            <p>A. القاهرة</p>
+            <p>B. الإسكندرية</p>
+            <p>C. أسوان</p>
+            <p>D. الجيزة</p>
+            <p class="text-success fw-bold mt-2">الاجابة الصحيحة: القاهرة</p>
+          </div>
+          <div class="text-end mt-3">
+            <button class="btn btn-warning me-2">تعديل</button>
+            <button class="btn btn-danger">حذف</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger px-3">
+  <div class="container-fluid">
+
+    <a class="navbar-brand d-flex align-items-center fs-1" href="#">
+      <i class="fas fa-graduation-cap me-2"></i> فاينال
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+@if(user?.role === "Doctor")
+{
+            <a class="nav-link text-white" routerLink="newexam">
+            <i class="fas fa-plus-circle me-1"></i> اختبار جديد
+          </a>
+}
+        </li>
+        <li class="nav-item">
+@if (user?.role === 'Doctor') {
+  <a class="nav-link text-white" routerLink="students">
+    <i class="fas fa-users me-1"></i> الطلاب
+  </a>
+}
+
+        </li>
+        <li class="nav-item">
+@if(user !== null)
+{
+            <a class="nav-link text-white" routerLink="subjects">
+            <i class="fas fa-book me-1"></i> المواد
+          </a>
+}
+        </li>
+        <li class="nav-item">
+@if(user !== null)
+{
+            <a class="nav-link text-white" (click)="logout()" routerLink="/login">
+            <i class="fas fa-sign-out-alt me-1"></i> خروج
+          </a>
+}
+        </li>
+      </ul>
+
+@if(user == null)
+{
+        <button class="btn btn-outline-light me-2" routerLink="/login">
+        <i class="fas fa-sign-in-alt"></i> دخول
+      </button>
+}
+@if(user == null){
+
+      <button class="btn btn-light text-danger me-2" routerLink="/register">
+        <i class="fas fa-user-plus"></i> تسجيل
+      </button>
+}
+@if (user !== null) {
+  <span class="badge rounded-pill bg-light text-danger px-3 py-2">
+    <i class="fas fa-user me-1"></i> {{ user?.name }}
+  </span>
+} @else {
+  <span class="badge rounded-pill bg-light text-secondary px-3 py-2">
+    <i class="fas fa-user me-1"></i>  جديد
+  </span>
+}
+
+    </div>
+  </div>
+</nav>

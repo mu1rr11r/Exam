@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="card shadow-lg p-4 mx-auto" style="max-width: 600px;">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-danger">Login</h2>
+    </div>
+
+    <form [formGroup]="loginform">
+
+      <!-- اختيار الدور -->
+      <div class="mb-3 text-center">
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="student"
+            value="students"
+            formControlName="type"> <!-- ✅ هنا -->
+          <label class="form-check-label fw-bold" for="student">طالب</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="professor"
+            value="Doctor"
+            formControlName="type"> <!-- ✅ هنا -->
+          <label class="form-check-label fw-bold" for="professor">دكتور</label>
+        </div>
+      </div>
+
+      <!-- الايميل -->
+      <div class="mb-3">
+        <label for="email" class="form-label fw-bold">الايميل</label>
+        <input type="email" class="form-control border-danger" id="email" placeholder="ادخل الايميل" formControlName="email">
+      </div>
+
+      <!-- كلمة المرور -->
+      <div class="mb-3">
+        <label for="password" class="form-label fw-bold">كلمة المرور</label>
+        <input type="password" class="form-control border-danger" id="password" placeholder="ادخل كلمة المرور" formControlName="password">
+      </div>
+
+      <!-- الفوتر -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <a routerLink="/register" class="text-primary fw-bold text-decoration-none">انشاء حساب ؟</a>
+        <button type="submit" class="btn btn-danger px-4" (click)="submit()">تسجيل الدخول</button>
+      </div>
+
+    </form>
+  </div>
+</div>
