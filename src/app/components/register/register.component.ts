@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
     MatFormFieldModule,
     MatInputModule,
     RouterLink
-],
+  ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -31,60 +31,51 @@ export class RegisterComponent implements OnInit {
   private readonly toastr = inject(ToastrService);
 
   ngOnInit(): void {
-    this.creatform();
-    this.getCreateForm();
-  } //
-
-  creatform() {
     this.userform = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
       repassword: ['', [Validators.required]]
     });
-  }
 
-  getCreateForm() {
     this.authService.getCreateForm('students').subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.students = res;
-      },
-      error: (err) => {
-        console.log(err);
-      }
+      next: res => this.students = res,
+      error: err => console.log(err)
     });
   }
 
   submit() {
+    if (this.userform.value.password !== this.userform.value.repassword) {
+      this.toastr.error("كلمة المرور غير متطابقة");
+      return;
+    }
+
     const model = {
-      name: this.userform.get('name')?.value,
-      email: this.userform.get('email')?.value,
-      password: this.userform.get('password')?.value
+      name: this.userform.value.name,
+      email: this.userform.value.email,
+      password: this.userform.value.password
     };
 
-    let index = this.students.findIndex(item => item.email === this.userform.value.email);
-
-    if (index !== -1) {
+    const exists = this.students.find(item => item.email === model.email);
+    if (exists) {
       this.toastr.error("هذا البريد مسجل من قبل");
-    } else {
-    this.authService.createForm(model).subscribe({
-  next: (res) => {
-    console.log(res);
-    this.toastr.success("تم التسجيل بنجاح");
-
-    // ✅ احفظ بيانات المستخدم الجديد
-    localStorage.setItem('user', JSON.stringify(model));
-
-    // ✅ بعد التسجيل دخّله على صفحة المواد (أو أي صفحة انت عايز)
-    this.router.navigate(['/students']);
-  },
-  error: (err) => {
-    console.log(err);
-    this.toastr.error("حصل خطأ أثناء التسجيل");
-  }
-});
-
+      return;
     }
+
+    this.authService.createForm(model).subscribe({
+      next: res => {
+        this.toastr.success("تم التسجيل بنجاح");
+
+        const userModel = { name: model.name, role: 'students' };
+        this.authService.userSubject.next(userModel);
+        localStorage.setItem('user', JSON.stringify(userModel));
+
+        this.router.navigate(['/students']);
+      },
+      error: err => {
+        console.log(err);
+        this.toastr.error("حصل خطأ أثناء التسجيل");
+      }
+    });
   }
 }

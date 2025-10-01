@@ -1,28 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavauthComponent } from "./components/navauth/navauth.component";
-import { AuthService } from './core/Service/auth.service';
+import { NavauthComponent } from './components/navauth/navauth.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, NavauthComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  template: `
+    <app-navauth></app-navauth>
+    <router-outlet></router-outlet>
+  `,
 })
-export class AppComponent implements OnInit{
-  private readonly AuthService=inject(AuthService)
-
-
-  ngOnInit(): void {
-    this.getUserData()
-  }
-  getUserData()
-  {
-    this.AuthService.getRol().subscribe({
-      next: (res) => {
-        this.AuthService.user .next (res);
-      },
-    });
-  }
-}
+export class AppComponent {}

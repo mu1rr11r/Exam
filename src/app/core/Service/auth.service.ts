@@ -1,62 +1,48 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { environment } from '../enviroments/enviro';
-import { Observable, Subject, tap } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../enviroments/enviro';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  user = new Subject<any>();
+  public userSubject = new BehaviorSubject<any>(this.getUser());
+  user$ = this.userSubject.asObservable();
   private readonly http = inject(HttpClient);
 
   constructor(private router: Router) {}
+  
 
   private isBrowser(): boolean {
     return typeof window !== 'undefined' && !!window.localStorage;
   }
 
-
   createForm(model: any) {
     return this.http.post(environment.api + "students", model);
-  }
-
-  login(model: any): Observable<any> {
-    return this.http.post(environment.api + "login", model).pipe(
-      tap((res: any) => {
-        if (res?.token && this.isBrowser()) {
-          this.setToken(res.token);
-          localStorage.setItem('user', JSON.stringify(res.user));
-          this.user.next(res.user);
-        }
-      })
-    );
   }
 
   getCreateForm(type: string) {
     return this.http.get<any[]>(environment.api + type);
   }
 
-  getRol() {
-    return this.http.get(environment.api + "login/1");
+  getRol(): Observable<any> {
+    return this.http.get(environment.api + "login/1").pipe(
+      tap((res: any) => this.userSubject.next(res))
+    );
   }
 
-  setToken(token: string) {
-    if (this.isBrowser()) {
-      localStorage.setItem('token', token);
-    }
-  }
-
-  getToken() {
-    if (this.isBrowser()) {
-      return localStorage.getItem('token');
-    }
-    return null;
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.getToken();
+  login(model: any): Observable<any> {
+    return this.http.post(environment.api + "login", model).pipe(
+      tap((res: any) => {
+        if (res?.token && this.isBrowser()) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify(res.user));
+          this.userSubject.next(res.user);
+        }
+      })
+    );
   }
 
   logout() {
@@ -64,7 +50,7 @@ export class AuthService {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     }
-    this.user.next(null);
+    this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
 
@@ -74,10 +60,5 @@ export class AuthService {
       return user ? JSON.parse(user) : null;
     }
     return null;
-
   }
 }
-
-
-
-

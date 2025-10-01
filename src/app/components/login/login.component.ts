@@ -1,9 +1,8 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-
 import { AuthService } from '../../core/Service/auth.service';
 
 @Component({
@@ -13,9 +12,8 @@ import { AuthService } from '../../core/Service/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginform!: FormGroup;
-  users: any[] = [];
   type: string = 'students';
 
   private readonly authService = inject(AuthService);
@@ -24,31 +22,10 @@ export class LoginComponent {
   private readonly fb = inject(FormBuilder);
 
   ngOnInit(): void {
-    this.createForm();
-    this.getCreateForm();
-  }
-
-  createForm() {
     this.loginform = this.fb.group({
       type: [this.type],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-    });
-  }
-
-  getRole(event: any) {
-    this.type = event.value;
-    this.getCreateForm();
-  }
-
-  getCreateForm() {
-    this.authService.getCreateForm(this.type).subscribe({
-      next: (res: any) => {
-        this.users = res;
-      },
-      error: (err) => {
-        console.log(err);
-      }
+      password: ['', [Validators.required]]
     });
   }
 
@@ -60,39 +37,31 @@ export class LoginComponent {
       return;
     }
 
-    this.authService.getCreateForm(formValue.type).subscribe(
-      (res: any[]) => {
+    this.authService.getCreateForm(formValue.type).subscribe({
+      next: (res: any[]) => {
         const user = res.find(
-          (item: any) =>
-            item.email === formValue.email && item.password === formValue.password
+          item => item.email === formValue.email && item.password === formValue.password
         );
 
         if (user) {
-          const model = {
-            name: user.name,
-            role: formValue.type,
-          };
-
+          const model = { name: user.name, role: formValue.type };
+          this.authService.userSubject.next(model);
           localStorage.setItem('user', JSON.stringify(model));
           localStorage.setItem('token', user.id.toString());
 
           this.toastr.success('تم تسجيل الدخول بنجاح');
 
-          if (formValue.type === 'students') {
-            this.router.navigate(['/students']);
-          } else if (formValue.type === 'Doctor') {
-            this.router.navigate(['/newexam']);
-          } else {
-            this.router.navigate(['/subjects']);
-          }
+          if (formValue.type === 'students') this.router.navigate(['/students']);
+          else if (formValue.type === 'Doctor') this.router.navigate(['/newexam']);
+          else this.router.navigate(['/subjects']);
         } else {
           this.toastr.error('البريد أو كلمة المرور غير صحيحة');
         }
       },
-      (err) => {
+      error: (err) => {
         console.log(err);
         this.toastr.error('مشكلة في السيرفر');
       }
-    );
+    });
   }
 }

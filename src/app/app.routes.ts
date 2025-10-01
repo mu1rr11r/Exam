@@ -7,18 +7,18 @@ import { StudentsComponent } from './components/students/students.component';
 import { SubjectsComponent } from './components/subjects/subjects.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
-import { authGuard } from './core/guards/auth.guard';
 import { logtGuard } from './core/guards/logt.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [logtGuard] },
   { path: 'login', component: LoginComponent, canActivate: [logtGuard] },
 
-  { path: 'newexam', component: NewExamComponent, canActivate: [authGuard], data: { role: 'Doctor' } },
+  { path: 'newexam', component: NewExamComponent, canActivate: [roleGuard], data: { role: 'Doctor' } },
 
-  { path: 'students', component: StudentsComponent, canActivate: [authGuard], data: { role: 'Doctor' } },
+  { path: 'students', component: StudentsComponent, canActivate: [roleGuard], data: { role: 'Doctor' } },
 
-  { path: 'subjects', component: SubjectsComponent, canActivate: [authGuard] , data: { role: 'students' }},
+  { path: 'subjects', component: SubjectsComponent, canActivate: [roleGuard] , data: { role: 'students' }},
 
   { path: 'unauthorized', component: UnauthorizedComponent },
 
